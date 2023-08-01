@@ -6,6 +6,8 @@ in poetry2nix.mkPoetryApplication {
   src = ./.;
   projectDir = ./.;
 
+  SETUPTOOLS_SCM_PRETEND_VERSION="1.10.4";
+
   nativeBuildInputs = [ setuptools-scm git ];
 
   overrides = poetry2nix.defaultPoetryOverrides.extend
