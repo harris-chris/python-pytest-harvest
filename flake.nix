@@ -17,15 +17,18 @@
 
     poetry2nix = poetry_2_nix.legacyPackages.${system};
 
-    pytest-harvest =
-      let
-        pkg = pkgs.callPackage ./pytest-harvest.nix {
+    getPytestHarvest = pkgs:
+      pkgs.callPackage ./pytest-harvest.nix {
           inherit poetry2nix;
           setuptools-scm = pkgs.python310.pkgs.setuptools-scm;
         };
-      in pkg;
   in {
-    packages.${system} = { inherit pytest-harvest; };
+    packages.${system} =
+      let pytest-harvest = getPytestHarvest pkgs;
+      in { inherit pytest-harvest; };
+    overlays.default = final: prev:
+      let pytest-harvest = getPytestHarvest prev;
+      in { inherit pytest-harvest; };
   };
 }
 
